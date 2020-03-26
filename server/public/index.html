@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PWA Demo</title>
+	</head>
+	<body>
+		<h1>PWA Push Notification | Service Worker Demo</h1>
+		<form id="form">
+			<label for="email">Enter your email for notificaiton subscription</label>
+			<input name="email" type="email" required placeholder="Enter your email here" />
+			<p class="message"></p>
+			<input type="submit" value="Subscribe" />
+		</form>
+		<script type="text/javascript">
+			var serviceWorker;
+
+			function registerServiceWorker() {
+				if ('serviceWorker' in navigator) {
+					return navigator.serviceWorker
+						.register('/sw.js')
+						.then(function(registration) {
+							console.log('ServiceWorker registration successful with scope: ', registration.scope);
+							return registration;
+						})
+						.catch(function(err) {
+							console.log('ServiceWorker registration failed: ', err);
+						});
+				}
+				return Promise.reject('Service Worker functionality not present');
+			}
+
+			function requestNotificationPermission() {
+				if ('Notification' in window) {
+					return window.Notification.requestPermission().then(function(permission) {
+						if (permission !== 'granted') return Promise.reject('Permission not granted for Notification');
+					});
+				}
+				return Promise.reject('Notification functionality not present');
+			}
+
+			function showNotification() {
+				if (Notification.permission === 'granted' && serviceWorker) {
+					var options = {
+						body: 'Let us kill Coronavirus - Client Side Request',
+						vibrate: [100, 50, 100],
+						data: {
+							dateOfArrival: Date.now(),
+							primaryKey: 1
+						},
+						actions: []
+					};
+					serviceWorker.showNotification('Hey, Master Bruce!', options);
+				}
+			}
+
+			function formSubmission(e) {
+				e.preventDefault();
+				var email = document.querySelector('input[type="email"]').value;
+				serviceWorker.active.postMessage(
+					JSON.stringify({
+						email: email
+					})
+				);
+				document.querySelector('.message').innerHTML =
+					'Close this tab. Open a new tab and goto https://pwa.devtool.tech/notfications/send/' +
+					email +
+					' to test a notification. You will get notification even if your tab is closed.';
+			}
+
+			function init() {
+				window.addEventListener('load', function() {
+					return registerServiceWorker()
+						.then(function(reg) {
+							serviceWorker = reg;
+							return requestNotificationPermission();
+						})
+						.then(showNotification)
+						.catch(console.log);
+				});
+				document.getElementById('form').addEventListener('submit', formSubmission);
+				window.addEventListener('message', function(event) {
+					if (event.data.type === 1) alert(event.data.message);
+				});
+			}
+			init();
+		</script>
+	</body>
+</html>

@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const webpush = require('web-push');
-const randomstring = require('randomstring');
+const path = require('path');
 
 const { saveToDatabase, sendNotification, getSubscription } = require('./helpers');
 
@@ -19,19 +19,25 @@ const VAPID_KEYS = {
 webpush.setVapidDetails('mailto:work.yomesh@gmail.com', VAPID_KEYS.PUBLIC_KEY, VAPID_KEYS.PRIVATE_KEY);
 
 app.use(cors());
-app.use(bodyParser.json());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+// Static Middleware
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Basic express middleware
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
+
+app.get('/', (req, res) => {
+	const filePath = path.resolve(__dirname, 'public', 'index.html');
+	return res.sendFile(filePath);
+});
 
 app.post('/subscriptions', async (req, res) => {
 	try {
-		const subscription = req.body;
-		const key = randomstring.generate({
-			length: 7,
-			charset: 'alphanumeric'
-		});
+		const { subscription, email } = req.body;
+		const key = email;
 		await saveToDatabase({
-			[key]: subscription
+			[key]: JSON.parse(subscription)
 		});
 		return res.status(200).json({ message: 'Subscription Saved', key });
 	} catch (err) {
