@@ -47,6 +47,7 @@ app.post('/subscriptions', async (req, res) => {
 });
 
 app.get('/notifications/send/:key', async (req, res) => {
+	console.log(`Request for ${req.params.key}`);
 	if (!req.params.key) return res.status(400).json({ message: 'Invalid Request' });
 
 	try {
