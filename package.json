@@ -1,0 +1,31 @@
+{
+	"name": "pwa-demo",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yomeshgupta/pwa-demo.git"
+	},
+	"author": "Yomesh Gupta <yomesh.gupta@gmail.com> (http://www.yomeshgupta.com/)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/yomeshgupta/pwa-demo/issues"
+	},
+	"homepage": "https://github.com/yomeshgupta/pwa-demo#readme",
+	"dependencies": {
+		"bluebird": "^3.7.2",
+		"body-parser": "^1.19.0",
+		"config": "^3.3.1",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"jsonfile": "^6.0.1",
+		"pug": "^2.0.4",
+		"randomstring": "^1.1.5",
+		"web-push": "^3.4.3"
+	}
+}
