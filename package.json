@@ -18,11 +18,11 @@
 	"homepage": "https://github.com/yomeshgupta/pwa-demo#readme",
 	"dependencies": {
 		"bluebird": "^3.7.2",
-		"body-parser": "^1.19.0",
+		"body-parser": "^1.20.1",
 		"config": "^3.3.1",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
-		"express": "^4.17.1",
+		"express": "^4.18.2",
 		"jsonfile": "^6.0.1",
 		"pug": "^2.0.4",
 		"randomstring": "^1.1.5",
